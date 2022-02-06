@@ -55,11 +55,11 @@ public class Drivetrain  extends SubsystemBase {
         doDrivetrain.execute();
     }
 
-    public void SetMotors(float value){
-        FLMotor.set(ControlMode.PercentOutput, value);
-        FRMotor.set(ControlMode.PercentOutput, value);
-        BLMotor.set(ControlMode.PercentOutput, value);
-        BRMotor.set(ControlMode.PercentOutput, value);
+    public void SetMotors(double left,double right){
+        FLMotor.set(ControlMode.PercentOutput, left);
+        FRMotor.set(ControlMode.PercentOutput, right);
+        BLMotor.set(ControlMode.PercentOutput, left);
+        BRMotor.set(ControlMode.PercentOutput, right);
 
         //System.out.println("FL: " + FLMotor.get() + " FR: " + FRMotor.get() + " BL: " + BLMotor.get() + " BR: " + BRMotor.get());
     }
@@ -74,10 +74,8 @@ public class Drivetrain  extends SubsystemBase {
     public void Drive(double left, double right) {
         double bounded_left=boundValue(left,1.0);
 	    double bounded_right=boundValue(right,1.0);
-	    BLMotor.set(ControlMode.PercentOutput, bounded_left);
-	    FLMotor.set(ControlMode.PercentOutput, bounded_left);
-	    FRMotor.set(ControlMode.PercentOutput, -1*bounded_right); 
-	    BRMotor.set(ControlMode.PercentOutput, -1*bounded_right);
+        SetMotors(bounded_left, -bounded_right);
+	    
     }
 
     public void DrivePolar(double power, double turn) {

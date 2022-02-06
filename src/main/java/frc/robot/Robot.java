@@ -24,6 +24,9 @@ public class Robot extends TimedRobot {
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
   private static Drivetrain driveTrain = new Drivetrain();
+  private m_autoStates m_autoState = m_autoStates.startup;
+  private long m_autoStartedTime = 0;
+  private enum m_autoStates {startup, reverse, done};
 
 
   /**
@@ -72,11 +75,39 @@ public class Robot extends TimedRobot {
     m_autoSelected = m_chooser.getSelected();
     // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
     System.out.println("Auto selected: " + m_autoSelected);
+    
+
   }
 
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
+    //System.out.println(System.currentTimeMillis());
+    switch (m_autoState){
+      case startup:
+        System.out.println("Starting robot...");
+        m_autoState = m_autoStates.reverse;
+        m_autoStartedTime = System.currentTimeMillis();
+        driveTrain.SetMotors(-0.25, -0.25);
+        break; 
+
+      case reverse:
+        long deltaTime = System.currentTimeMillis() - m_autoStartedTime;
+        //System.out.println(m_autoStartedTime);
+        if ( deltaTime >= 2000){
+          m_autoState = m_autoStates.done; 
+          System.out.println("Robot stopped. ");
+        driveTrain.SetMotors(0, 0);
+        }
+        break;
+
+      case done:
+        System.out.println("All done");
+        break; 
+
+
+
+    }
     switch (m_autoSelected) {
       case kCustomAuto:
         // Put custom auto code here
@@ -85,6 +116,8 @@ public class Robot extends TimedRobot {
       default:
         // Put default auto code here
         break;
+    
+
     }
   }
 
