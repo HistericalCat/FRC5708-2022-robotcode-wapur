@@ -20,7 +20,7 @@ public class Control {
         System.out.println("POV Switeched To " + (Control.pov == POV.ShooterPOV ? "Shooter" : "Intake"));
     }
 
-    public static POV getPov() {
+    public static POV getPOV() {
         return Control.pov;
     }
 }

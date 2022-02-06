@@ -2,41 +2,66 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
-import edu.wpi.first.wpilibj.motorcontrol.PWMTalonSRX;
-import edu.wpi.first.wpilibj.motorcontrol.PWMVictorSPX;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.commands.DriveWithJoystick;
 import frc.robot.Globals;
 import frc.robot.Pair;
 
+//Motor Controller imports
+import com.ctre.phoenix.motorcontrol.can.*;
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.motorcontrol.ControlMode;
 
 public class Drivetrain  extends SubsystemBase {
-    private PWMTalonSRX FLMotor;
-    private PWMTalonSRX FRMotor;
+    /*
+    private PWMVictorSPX FLMotor;
+    private PWMVictorSPX FRMotor;
     private PWMVictorSPX BLMotor;
     private PWMVictorSPX BRMotor;
+    */
+
+    private TalonFX FLMotor;
+    private TalonFX FRMotor;
+    private TalonFX BLMotor;
+    private TalonFX BRMotor;
 
     Encoder leftEncoder, rightEncoder;
     Gyro gyro;
 
     private boolean leftEncoderGood = false, rightEncoderGood = false;
 
+    private DriveWithJoystick.DoDrivetrain doDrivetrain;
+
     public Drivetrain(){    
-        FLMotor = new PWMTalonSRX(7);
-        FRMotor = new PWMTalonSRX(5);
-        BLMotor = new PWMVictorSPX(1);
-        BRMotor = new PWMVictorSPX(3);
+        FLMotor = new WPI_TalonFX(10);
+        FRMotor = new WPI_TalonFX(12);
+        BLMotor = new WPI_TalonFX(9);
+        BRMotor = new WPI_TalonFX(11);
+/*
+        System.out.println(FLMotor.getDescription());
+        System.out.println(FRMotor.getDescription());
+        System.out.println(BLMotor.getDescription());
+        System.out.println(BRMotor.getDescription());
+*/
+        doDrivetrain = new DriveWithJoystick.DoDrivetrain(this);
+        
+        //System.out.println("FLMotor: " + FLMotor.isAlive());
 
-        setDefaultCommand(new DriveWithJoystick.DoDrivetrain(this));
+        //setDefaultCommand(new DriveWithJoystick.DoDrivetrain(this));
+    }
 
-        //setDefaultCommand(DriveWithJoystick);
+    @Override
+    public void periodic(){
+        doDrivetrain.execute();
     }
 
     public void SetMotors(float value){
-        FLMotor.set(value);
-        FRMotor.set(value);
-        BLMotor.set(value);
-        BRMotor.set(value);
+        FLMotor.set(ControlMode.PercentOutput, value);
+        FRMotor.set(ControlMode.PercentOutput, value);
+        BLMotor.set(ControlMode.PercentOutput, value);
+        BRMotor.set(ControlMode.PercentOutput, value);
+
+        //System.out.println("FL: " + FLMotor.get() + " FR: " + FRMotor.get() + " BL: " + BLMotor.get() + " BR: " + BRMotor.get());
     }
     
     
@@ -49,10 +74,10 @@ public class Drivetrain  extends SubsystemBase {
     public void Drive(double left, double right) {
         double bounded_left=boundValue(left,1.0);
 	    double bounded_right=boundValue(right,1.0);
-	    FLMotor.set(bounded_left);
-	    BLMotor.set(bounded_left);
-	    FRMotor.set(-1*bounded_right); 
-	    BRMotor.set(-1*bounded_right);
+	    BLMotor.set(ControlMode.PercentOutput, bounded_left);
+	    FLMotor.set(ControlMode.PercentOutput, bounded_left);
+	    FRMotor.set(ControlMode.PercentOutput, -1*bounded_right); 
+	    BRMotor.set(ControlMode.PercentOutput, -1*bounded_right);
     }
 
     public void DrivePolar(double power, double turn) {
@@ -104,12 +129,12 @@ public class Drivetrain  extends SubsystemBase {
     }
 
     // Returns a vector with the current motor powers of drivetrain in the following order: Front-Left, Front-Right, Back-Left, Back-Right
-    public double[] getMotorPowers() {
+    /*public double[] getMotorPowers() {
         return new double[] { 
             this.FLMotor.get(),
             this.FRMotor.get(),
             this.BLMotor.get(),
             this.BRMotor.get()
         };
-    }
+    }*/
 }

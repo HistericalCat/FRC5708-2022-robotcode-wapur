@@ -2,6 +2,7 @@ package frc.robot.commands;
 
 
 import frc.robot.Control;
+
 import frc.robot.subsystems.Drivetrain;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
@@ -11,26 +12,28 @@ public class DriveWithJoystick {
         private final Drivetrain drivetrain;
     
         public DoDrivetrain(Drivetrain d){
+            System.out.println("Do Drivetrain Constructed...");
             drivetrain = d;
             addRequirements(drivetrain);
         }
         
         @Override
         public void execute() {
-            float value = (float)Control.getXboxCtrl().getRightTriggerAxis();
-            drivetrain.SetMotors(value);
+            //System.out.println(Control.getXboxCtrl().getRightTriggerAxis());
+            //float value = (float)Control.getXboxCtrl().getRightTriggerAxis();
+            //drivetrain.SetMotors(value);
             
-            /*
             double turn = 0;
 	        double power = 0;
+            double creepRate = 0.3;
 
-	        turn = -Control.getXboxCtrl().getLeftX()
+	        turn = -Control.getXboxCtrl().getLeftX();
 	        power = Control.getXboxCtrl().getRightTriggerAxis() - Control.getXboxCtrl().getLeftTriggerAxis();
-	
+            
 	        turn = inputTransform(turn, 0, 0.1);
 	        power = inputTransform(power, 0.15, 0.03);
-	
-            if(controller->GetYButton()){ //If we're in creep mode
+            
+            if(Control.getXboxCtrl().getYButton()){ //If we're in creep mode
                 turn *= creepRate;
                 power *= creepRate;
             }
@@ -38,9 +41,10 @@ public class DriveWithJoystick {
                 power = -power; //Switch forwards and backwards.
             }
             power *= .3; //Intentionally limit ourselves.
+            turn *= .3; // also limits turn power
 
-            drivetrain->DrivePolar(power, turn);
-            */
+            drivetrain.DrivePolar(power, turn);
+            
         }
 
         @Override
