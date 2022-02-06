@@ -30,7 +30,6 @@ public class Drivetrain  extends SubsystemBase {
 
     private boolean leftEncoderGood = false, rightEncoderGood = false;
 
-    private DriveWithJoystick.DoDrivetrain doDrivetrain;
 
     public Drivetrain(){    
         FLMotor = new WPI_TalonFX(10);
@@ -43,7 +42,6 @@ public class Drivetrain  extends SubsystemBase {
         System.out.println(BLMotor.getDescription());
         System.out.println(BRMotor.getDescription());
 */
-        doDrivetrain = new DriveWithJoystick.DoDrivetrain(this);
         
         //System.out.println("FLMotor: " + FLMotor.isAlive());
 
@@ -52,7 +50,6 @@ public class Drivetrain  extends SubsystemBase {
 
     @Override
     public void periodic(){
-        doDrivetrain.execute();
     }
 
     public void SetMotors(double left,double right){
@@ -60,6 +57,7 @@ public class Drivetrain  extends SubsystemBase {
         FRMotor.set(ControlMode.PercentOutput, right);
         BLMotor.set(ControlMode.PercentOutput, left);
         BRMotor.set(ControlMode.PercentOutput, right);
+        System.out.println("SetMotors " + left + "  "  + right);
 
         //System.out.println("FL: " + FLMotor.get() + " FR: " + FRMotor.get() + " BL: " + BLMotor.get() + " BR: " + BRMotor.get());
     }

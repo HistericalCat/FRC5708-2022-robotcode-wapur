@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.commands.DriveWithJoystick;
 import frc.robot.subsystems.Drivetrain;
 
 /**
@@ -27,7 +28,7 @@ public class Robot extends TimedRobot {
   private m_autoStates m_autoState = m_autoStates.startup;
   private long m_autoStartedTime = 0;
   private enum m_autoStates {startup, reverse, done};
-
+  private DriveWithJoystick.DoDrivetrain doDrivetrain;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -75,20 +76,23 @@ public class Robot extends TimedRobot {
     m_autoSelected = m_chooser.getSelected();
     // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
     System.out.println("Auto selected: " + m_autoSelected);
-    
-
+    //driveTrain.DrivePolar(-0.3, 0);
+  
   }
 
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
+    //driveTrain.SetMotors(0.7, 0.7); 
     //System.out.println(System.currentTimeMillis());
+    System.out.println("Startup");
     switch (m_autoState){
       case startup:
         System.out.println("Starting robot...");
         m_autoState = m_autoStates.reverse;
         m_autoStartedTime = System.currentTimeMillis();
-        driveTrain.SetMotors(-0.25, -0.25);
+        driveTrain.Drive(-0.1, -0.1);
+        //driveTrain.DrivePolar(-0.3, 0);
         break; 
 
       case reverse:
@@ -97,13 +101,15 @@ public class Robot extends TimedRobot {
         if ( deltaTime >= 2000){
           m_autoState = m_autoStates.done; 
           System.out.println("Robot stopped. ");
-        driveTrain.SetMotors(0, 0);
+          driveTrain.SetMotors(0, 0);
         }
+        
         break;
 
       case done:
-        System.out.println("All done");
+        //System.out.println("All done");
         break; 
+        
 
 
 
@@ -118,16 +124,21 @@ public class Robot extends TimedRobot {
         break;
     
 
-    }
+    } 
   }
 
   /** This function is called once when teleop is enabled. */
   @Override
-  public void teleopInit() {}
-
+  public void teleopInit() {
+  doDrivetrain = new DriveWithJoystick.DoDrivetrain(driveTrain);
+  }
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+    doDrivetrain.execute();
+
+  }
+
 
   /** This function is called once when the robot is disabled. */
   @Override
