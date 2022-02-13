@@ -12,6 +12,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.DriveWithJoystick;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Climber;
+import frc.robot.subsystems.Sensors;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -24,11 +26,17 @@ public class Robot extends TimedRobot {
   private static final String kCustomAuto = "My Auto";
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
+
   private static Drivetrain driveTrain = new Drivetrain();
+  private static Climber climber = new Climber();
+  private static Sensors sensors = new Sensors();
+
+  private DriveWithJoystick.DoDrivetrain doDrivetrain;
+  private DriveWithJoystick.DoClimber doClimber;
+
   private m_autoStates m_autoState = m_autoStates.startup;
   private long m_autoStartedTime = 0;
   private enum m_autoStates {startup, reverse, done};
-  private DriveWithJoystick.DoDrivetrain doDrivetrain;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -130,13 +138,14 @@ public class Robot extends TimedRobot {
   /** This function is called once when teleop is enabled. */
   @Override
   public void teleopInit() {
-  doDrivetrain = new DriveWithJoystick.DoDrivetrain(driveTrain);
+    doDrivetrain = new DriveWithJoystick.DoDrivetrain(driveTrain);
+    doClimber = new DriveWithJoystick.DoClimber(climber);
   }
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
     doDrivetrain.execute();
-
+    doClimber.execute();
   }
 
 

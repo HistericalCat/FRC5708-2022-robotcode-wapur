@@ -1,9 +1,9 @@
 package frc.robot.commands;
 
-
 import frc.robot.Control;
-
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Climber;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class DriveWithJoystick {
@@ -19,9 +19,6 @@ public class DriveWithJoystick {
         
         @Override
         public void execute() {
-            //System.out.println(Control.getXboxCtrl().getRightTriggerAxis());
-            //float value = (float)Control.getXboxCtrl().getRightTriggerAxis();
-            //drivetrain.SetMotors(value);
             
             double turn = 0;
 	        double power = 0;
@@ -52,6 +49,31 @@ public class DriveWithJoystick {
             drivetrain.Drive(0, 0);
         }
 
+    }
+
+    public static class DoClimber extends CommandBase {
+        private final Climber climber;
+
+        public DoClimber(Climber c){
+            climber = c;
+            addRequirements(climber);
+        }
+
+        @Override
+        public void execute(){
+            float power = 0.0f;
+
+            if(Control.getXboxCtrl().getRightBumper()){
+                power = 1.0f;
+            } 
+            if(Control.getXboxCtrl().getLeftBumper()){
+                power = -1.0f;
+            }
+
+            //reduce power to 15%
+            power *= 0.15;
+            climber.driveActuator(power);
+        }
     }
 
     public static double inputTransform(

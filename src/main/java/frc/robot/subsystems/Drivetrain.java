@@ -13,13 +13,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
 public class Drivetrain  extends SubsystemBase {
-    /*
-    private PWMVictorSPX FLMotor;
-    private PWMVictorSPX FRMotor;
-    private PWMVictorSPX BLMotor;
-    private PWMVictorSPX BRMotor;
-    */
-
+   
     private TalonFX FLMotor;
     private TalonFX FRMotor;
     private TalonFX BLMotor;
@@ -36,15 +30,8 @@ public class Drivetrain  extends SubsystemBase {
         FRMotor = new WPI_TalonFX(12);
         BLMotor = new WPI_TalonFX(9);
         BRMotor = new WPI_TalonFX(11);
-/*
-        System.out.println(FLMotor.getDescription());
-        System.out.println(FRMotor.getDescription());
-        System.out.println(BLMotor.getDescription());
-        System.out.println(BRMotor.getDescription());
-*/
         
         //System.out.println("FLMotor: " + FLMotor.isAlive());
-
         //setDefaultCommand(new DriveWithJoystick.DoDrivetrain(this));
     }
 
@@ -124,13 +111,5 @@ public class Drivetrain  extends SubsystemBase {
 	    }
     }
 
-    // Returns a vector with the current motor powers of drivetrain in the following order: Front-Left, Front-Right, Back-Left, Back-Right
-    /*public double[] getMotorPowers() {
-        return new double[] { 
-            this.FLMotor.get(),
-            this.FRMotor.get(),
-            this.BLMotor.get(),
-            this.BRMotor.get()
-        };
-    }*/
+   
 }
