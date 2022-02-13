@@ -1,3 +1,5 @@
+package frc.robot.lib;
+
 import edu.wpi.first.wpilibj.I2C;
 
 @SuppressWarnings("unused")
