@@ -14,7 +14,7 @@ public class Sensors extends SubsystemBase {
     @Override
     public void periodic(){
         Color color1 = colorSensor1.getColor();
-        System.out.println("Color sensor 1 seeing " + color1.red + " " + color1.green + " " + color1.blue);
+        System.out.println("Color sensor 1 seeing " + color1.red*255 + " " + color1.green*255 + " " + color1.blue);
 
         Color color2 = colorSensor2.getColor();
         System.out.println("Color sensor 2 seeing " + color2.toString());
