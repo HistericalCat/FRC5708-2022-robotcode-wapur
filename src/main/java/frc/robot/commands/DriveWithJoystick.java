@@ -62,14 +62,18 @@ public class DriveWithJoystick {
         @Override
         public void execute(){
             float power = 0.0f;
-
-            if(Control.getXboxCtrl().getRightBumper()){
-                power = 1.0f;
-            } 
-            if(Control.getXboxCtrl().getLeftBumper()){
-                power = -1.0f;
+            int POV = Control.getXboxCtrl().getPOV();
+            if (POV>=0){
+                //if up on d-pad linear actuator power = 1
+                if(POV>90 && POV<270){
+                    power = -1.0f;
+                } 
+                //if down on the d-pad linear actuator power = -1
+                else if(POV>270 || POV<90){
+                    power = 1.0f;
+                }
             }
-
+            System.out.println(power);
             //reduce power to 15%
             power *= 0.15;
             climber.driveActuator(power);

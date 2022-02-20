@@ -15,6 +15,7 @@ import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Sensors;
 
+
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
  * each mode, as described in the TimedRobot documentation. If you change the name of this class or
@@ -37,6 +38,9 @@ public class Robot extends TimedRobot {
   private m_autoStates m_autoState = m_autoStates.startup;
   private long m_autoStartedTime = 0;
   private enum m_autoStates {startup, reverse, done};
+
+  private enum m_controlModeValues {drive, climb, park}
+  private m_controlModeValues m_controlMode = m_controlModeValues.climb;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -144,8 +148,16 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    doDrivetrain.execute();
-    doClimber.execute();
+    if (m_controlMode==m_controlModeValues.drive){
+      doDrivetrain.execute();
+    }
+    else if ( m_controlMode==m_controlModeValues.climb){
+      doClimber.execute();
+    }
+    else if (m_controlMode == m_controlModeValues.park){
+
+    }
+    
   }
 
 
@@ -159,10 +171,14 @@ public class Robot extends TimedRobot {
 
   /** This function is called once when test mode is enabled. */
   @Override
-  public void testInit() {}
-
+  public void testInit() {
+    
+  }
+  
   /** This function is called periodically during test mode. */
   @Override
-  public void testPeriodic() {}
+  public void testPeriodic() {
+
+  }
 
 }
