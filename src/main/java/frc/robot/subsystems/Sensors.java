@@ -1,23 +1,22 @@
 package frc.robot.subsystems;
 
-import frc.robot.lib.TCS34725ColorSensor;
-import frc.robot.lib.TCS34725ColorSensor.TCSColor;
-
+import com.revrobotics.ColorSensorV3;
+import edu.wpi.first.wpilibj.I2C;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Sensors extends SubsystemBase {
-    private TCS34725ColorSensor colorSensor = new TCS34725ColorSensor();
-    private TCSColor color; 
+    private final ColorSensorV3 colorSensor1 = new ColorSensorV3(I2C.Port.kOnboard);
+    private final ColorSensorV3 colorSensor2 = new ColorSensorV3(I2C.Port.kMXP);
 
-    public Sensors(){
-        if(colorSensor.init() != 0){
-            System.out.println("Failed to initialize sensor!");
-        }
-    }
+    public Sensors(){}
 
     @Override
     public void periodic(){
-        color = colorSensor.readColors();
-        System.out.println("Seeing " + color.toString());
+        Color color1 = colorSensor1.getColor();
+        System.out.println("Color sensor 1 seeing " + color1.red*255 + " " + color1.green*255 + " " + color1.blue);
+
+        Color color2 = colorSensor2.getColor();
+        System.out.println("Color sensor 2 seeing " + color2.toString());
     }
 }
