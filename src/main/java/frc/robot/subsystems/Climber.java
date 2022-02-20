@@ -3,10 +3,11 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
-
+import frc.robot.subsystems.Sensors;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Climber extends SubsystemBase {
+    private static Sensors sensors = new Sensors();
     private VictorSPX actuatorMotor;
 
     //for climber in a box
@@ -28,4 +29,6 @@ public class Climber extends SubsystemBase {
     public void driveWinch(float value){
         winchMotor1.set(ControlMode.PercentOutput, value);
     }
+
+    
 }

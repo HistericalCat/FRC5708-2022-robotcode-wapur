@@ -1,7 +1,9 @@
 package frc.robot.commands;
 
 import frc.robot.Control;
+import frc.robot.lib.TCS34725ColorSensor.TCSColor;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Sensors;
 import frc.robot.subsystems.Climber;
 
 import javax.swing.Action;
@@ -12,11 +14,12 @@ public class DriveWithJoystick {
 
     public static class DoDrivetrain extends CommandBase {
         private final Drivetrain drivetrain;
-    
+        
         public DoDrivetrain(Drivetrain d){
             System.out.println("Do Drivetrain Constructed...");
             drivetrain = d;
             addRequirements(drivetrain);
+
         }
         
         @Override
@@ -55,10 +58,11 @@ public class DriveWithJoystick {
 
     public static class DoClimber extends CommandBase {
         private final Climber climber;
-
+        private Sensors sensor = new Sensors();
         public DoClimber(Climber c){
             climber = c;
             addRequirements(climber);
+            
         }
 
         @Override
@@ -76,12 +80,16 @@ public class DriveWithJoystick {
                 }
             }
             //System.out.println(power);
-            //reduce actuator power to 50%
-            actPower *= 0.50;
+            //reduce actuator power to 20%
+            actPower *= 0.20;
             climber.driveActuator(actPower);
-
+            
+            sensor.getWinchSensor();
+            TCSColor winchSensor = sensor.getWinchSensor();
+            int h = winchSensor.getH();
+            
             float winchPower = 0.0f;
-            if (Control.getXboxCtrl().getLeftBumper()){
+            if (h>40 && Control.getXboxCtrl().getLeftBumper()){
                 winchPower -=1.0f;
             }
             if (Control.getXboxCtrl().getRightBumper()){
