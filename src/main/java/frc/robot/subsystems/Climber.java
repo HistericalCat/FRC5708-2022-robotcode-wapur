@@ -16,13 +16,16 @@ public class Climber extends SubsystemBase {
     public Climber(){
         //placeholder port numbers
         actuatorMotor = new WPI_VictorSPX(4);
-        /*
         winchMotor1   = new WPI_VictorSPX(2);
-        winchMotor2   = new WPI_VictorSPX(3);
-        */
+        //winchMotor2   = new WPI_VictorSPX(3);
+
     }
 
     public void driveActuator(float value){
         actuatorMotor.set(ControlMode.PercentOutput, value);
+    }
+
+    public void driveWinch(float value){
+        winchMotor1.set(ControlMode.PercentOutput, value);
     }
 }

@@ -42,7 +42,8 @@ public class Robot extends TimedRobot {
   private enum m_autoStates {startup, reverse, done};
 
   private enum m_controlModeValues {drive, climb, park}
-  private m_controlModeValues m_controlMode = m_controlModeValues.climb;
+  private m_controlModeValues m_controlMode = m_controlModeValues.drive;
+  private boolean m_xButtonState = false; 
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -152,6 +153,18 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
+    if(m_xButtonState!=Control.getXboxCtrl().getXButton()){
+      m_xButtonState = Control.getXboxCtrl().getXButton();
+      if(m_xButtonState){
+        if(m_controlMode == m_controlModeValues.drive){
+          m_controlMode = m_controlModeValues.climb;
+        }
+        else if (m_controlMode == m_controlModeValues.climb){
+          m_controlMode = m_controlModeValues.drive;
+        }
+      System.out.println(m_controlMode);
+      }
+    }
     if (m_controlMode==m_controlModeValues.drive){
       doDrivetrain.execute();
     }

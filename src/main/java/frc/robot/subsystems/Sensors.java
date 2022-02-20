@@ -10,7 +10,7 @@ public class Sensors extends SubsystemBase {
     private final ColorSensorV3 colorSensor2 = new ColorSensorV3(I2C.Port.kMXP);
 
     public Sensors(){}
-
+/*
     @Override
     public void periodic(){
         Color color1 = colorSensor1.getColor();
@@ -18,5 +18,5 @@ public class Sensors extends SubsystemBase {
 
         Color color2 = colorSensor2.getColor();
         System.out.println("Color sensor 2 seeing " + color2.toString());
-    }
+    }*/
 }

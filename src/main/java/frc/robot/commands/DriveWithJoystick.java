@@ -4,6 +4,8 @@ import frc.robot.Control;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Climber;
 
+import javax.swing.Action;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class DriveWithJoystick {
@@ -61,22 +63,37 @@ public class DriveWithJoystick {
 
         @Override
         public void execute(){
-            float power = 0.0f;
+            float actPower = 0.0f;
             int POV = Control.getXboxCtrl().getPOV();
             if (POV>=0){
                 //if up on d-pad linear actuator power = 1
                 if(POV>90 && POV<270){
-                    power = -1.0f;
+                    actPower = -1.0f;
                 } 
                 //if down on the d-pad linear actuator power = -1
                 else if(POV>270 || POV<90){
-                    power = 1.0f;
+                    actPower = 1.0f;
                 }
             }
-            System.out.println(power);
-            //reduce power to 15%
-            power *= 0.15;
-            climber.driveActuator(power);
+            //System.out.println(power);
+            //reduce actuator power to 15%
+            actPower *= 0.15;
+            climber.driveActuator(actPower);
+
+            float winchPower = 0.0f;
+            if (Control.getXboxCtrl().getLeftBumper()){
+                winchPower -=1.0f;
+            }
+            if (Control.getXboxCtrl().getRightBumper()){
+                winchPower +=1.0f;
+            }
+            //reduce winch power to 15%
+            winchPower *= 0.15;
+            climber.driveWinch(winchPower);
+            System.out.println("Winch: " + winchPower + " Act: " + actPower);
+            
+
+
         }
     }
 
