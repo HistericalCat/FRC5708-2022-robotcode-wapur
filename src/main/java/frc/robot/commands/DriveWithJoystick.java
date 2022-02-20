@@ -76,8 +76,8 @@ public class DriveWithJoystick {
                 }
             }
             //System.out.println(power);
-            //reduce actuator power to 15%
-            actPower *= 0.15;
+            //reduce actuator power to 50%
+            actPower *= 0.50;
             climber.driveActuator(actPower);
 
             float winchPower = 0.0f;
@@ -87,8 +87,8 @@ public class DriveWithJoystick {
             if (Control.getXboxCtrl().getRightBumper()){
                 winchPower +=1.0f;
             }
-            //reduce winch power to 15%
-            winchPower *= 0.15;
+            //reduce winch power to 50%
+            winchPower *= 0.50;
             climber.driveWinch(winchPower);
             System.out.println("Winch: " + winchPower + " Act: " + actPower);
             
