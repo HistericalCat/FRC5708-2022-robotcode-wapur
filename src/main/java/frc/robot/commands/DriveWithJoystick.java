@@ -1,7 +1,6 @@
 package frc.robot.commands;
 
 import frc.robot.Control;
-import frc.robot.lib.TCS34725ColorSensor.TCSColor;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Sensors;
 import frc.robot.subsystems.Climber;
@@ -84,23 +83,33 @@ public class DriveWithJoystick {
             actPower *= 0.20;
             climber.driveActuator(actPower);
             
-            sensor.getWinchSensor();
-            TCSColor winchSensor = sensor.getWinchSensor();
-            int h = winchSensor.getH();
-            
-            float winchPower = 0.0f;
-            if (h>40 && Control.getXboxCtrl().getLeftBumper()){
-                winchPower -=1.0f;
+            float winch1Power = 0.0f;
+            if (Control.getXboxCtrl().getLeftBumper()){
+                winch1Power -=1.0f;
             }
             if (Control.getXboxCtrl().getRightBumper()){
-                winchPower +=1.0f;
+                winch1Power +=1.0f;
             }
             //reduce winch power to 50%
-            winchPower *= 0.50;
-            climber.driveWinch(winchPower);
-            System.out.println("Winch: " + winchPower + " Act: " + actPower);
+            winch1Power *= 0.50;
+            climber.driveWinch1(winch1Power);
+            System.out.println("Winch: " + winch1Power + " Act: " + actPower);
             
-
+            
+            float winch2Power = 0.0f;
+            double yAxis = Control.getXboxCtrl().getRightY();
+            if(yAxis>0){
+                if(yAxis>90 && yAxis<270){
+                    winch2Power -= 1.0f;
+                }
+                else if(yAxis>270 || yAxis<90){
+                    winch2Power += 1.0f;
+                }
+            }
+            winch2Power *=0.5;
+            climber.driveWinch2(winch2Power);
+            
+            
 
         }
     }

@@ -13,7 +13,6 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.DriveWithJoystick;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Climber;
-import frc.robot.subsystems.Sensors;
 
 
 /**
@@ -32,7 +31,6 @@ public class Robot extends TimedRobot {
 
   private static Drivetrain driveTrain = new Drivetrain();
   private static Climber climber = new Climber();
-  private static Sensors sensors = new Sensors();
 
   private DriveWithJoystick.DoDrivetrain doDrivetrain;
   private DriveWithJoystick.DoClimber doClimber;
