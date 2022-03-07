@@ -98,14 +98,11 @@ public class DriveWithJoystick {
             
             float winch2Power = 0.0f;
             double yAxis = Control.getXboxCtrl().getRightY();
-            if(yAxis>0){
-                if(yAxis>90 && yAxis<270){
-                    winch2Power -= 1.0f;
+                System.out.println("yAxis = " + yAxis);
+                if(yAxis > 0.1 || yAxis < -0.1){
+                    winch2Power = (float)yAxis; 
                 }
-                else if(yAxis>270 || yAxis<90){
-                    winch2Power += 1.0f;
-                }
-            }
+            
             winch2Power *=0.5;
             climber.driveWinch2(winch2Power);
             
