@@ -14,6 +14,9 @@ import frc.robot.commands.DriveWithJoystick;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Climber;
 
+import frc.robot.ControlScheme;
+import frc.robot.JohnControls;
+
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -42,6 +45,8 @@ public class Robot extends TimedRobot {
   private enum m_controlModeValues {drive, climb, park}
   private m_controlModeValues m_controlMode = m_controlModeValues.drive;
   private boolean m_xButtonState = false; 
+
+  private ControlScheme scheme = new JohnControls();
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -145,14 +150,15 @@ public class Robot extends TimedRobot {
   /** This function is called once when teleop is enabled. */
   @Override
   public void teleopInit() {
+    DriveWithJoystick.scheme = scheme;
     doDrivetrain = new DriveWithJoystick.DoDrivetrain(driveTrain);
     doClimber = new DriveWithJoystick.DoClimber(climber);
   }
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    if(m_xButtonState!=Control.getXboxCtrl().getXButton()){
-      m_xButtonState = Control.getXboxCtrl().getXButton();
+    if(m_xButtonState!=scheme.getSwitchMode()){
+      m_xButtonState = scheme.getSwitchMode();
       if(m_xButtonState){
         if(m_controlMode == m_controlModeValues.drive){
           m_controlMode = m_controlModeValues.climb;

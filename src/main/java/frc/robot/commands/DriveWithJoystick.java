@@ -5,11 +5,14 @@ import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Sensors;
 import frc.robot.subsystems.Climber;
 
+import frc.robot.ControlScheme;
+
 import javax.swing.Action;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class DriveWithJoystick {
+    public static ControlScheme scheme = new ControlScheme();
 
     public static class DoDrivetrain extends CommandBase {
         private final Drivetrain drivetrain;
@@ -29,12 +32,12 @@ public class DriveWithJoystick {
             double creepRate = 0.3;
 
 	        turn = -Control.getXboxCtrl().getLeftX();
-	        power = Control.getXboxCtrl().getRightTriggerAxis() - Control.getXboxCtrl().getLeftTriggerAxis();
+	        power = scheme.getDriveForward() - scheme.getDriveBackward();
             
 	        turn = inputTransform(turn, 0, 0.1);
 	        power = inputTransform(power, 0.15, 0.03);
             
-            if(Control.getXboxCtrl().getYButton()){ //If we're in creep mode
+            if(scheme.getCreepButton()){ //If we're in creep mode
                 turn *= creepRate;
                 power *= creepRate;
             }
@@ -67,42 +70,23 @@ public class DriveWithJoystick {
         @Override
         public void execute(){
             float actPower = 0.0f;
-            int POV = Control.getXboxCtrl().getPOV();
-            if (POV>=0){
-                //if up on d-pad linear actuator power = 1
-                if(POV>90 && POV<270){
-                    actPower = -1.0f;
-                } 
-                //if down on the d-pad linear actuator power = -1
-                else if(POV>270 || POV<90){
-                    actPower = 1.0f;
-                }
+            if(scheme.getActBackward()){
+                actPower = -1.0f;
+            } else if(scheme.getActForward()){
+                actPower = 1.0f;
             }
             //System.out.println(power);
             //reduce actuator power to 20%
-            actPower *= 0.20;
+            actPower *= 0.40;
             climber.driveActuator(actPower);
             
-            float winch1Power = 0.0f;
-            if (Control.getXboxCtrl().getLeftBumper()){
-                winch1Power -=1.0f;
-            }
-            if (Control.getXboxCtrl().getRightBumper()){
-                winch1Power +=1.0f;
-            }
+            float winch1Power = (float)scheme.getWinch1Power();
             //reduce winch power to 50%
             winch1Power *= 0.50;
             climber.driveWinch1(winch1Power);
-            System.out.println("Winch: " + winch1Power + " Act: " + actPower);
             
             
-            float winch2Power = 0.0f;
-            double yAxis = Control.getXboxCtrl().getRightY();
-                System.out.println("yAxis = " + yAxis);
-                if(yAxis > 0.1 || yAxis < -0.1){
-                    winch2Power = (float)yAxis; 
-                }
-            
+            float winch2Power = (float)scheme.getWinch2Power();
             winch2Power *=0.5;
             climber.driveWinch2(winch2Power);
             
