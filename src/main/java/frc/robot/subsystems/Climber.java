@@ -10,6 +10,11 @@ public class Climber extends SubsystemBase {
     private static Sensors sensors = new Sensors();
     private VictorSPX actuatorMotor;
 
+    public static DigitalInput actuatorOut = new DigitalInput(3);
+    public static DigitalInput actuatorIn = new DigitalInput(2);
+    public static DigitalInput winchLimit1 = new DigitalInput(0);
+    public static DigitalInput winchLimit2 = new DigitalInput(1);
+
     //for climber in a box
     private VictorSPX winchMotor1;
     private VictorSPX winchMotor2;
