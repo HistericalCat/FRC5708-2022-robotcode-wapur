@@ -44,7 +44,7 @@ public class Drivetrain  extends SubsystemBase {
         FRMotor.set(ControlMode.PercentOutput, right);
         BLMotor.set(ControlMode.PercentOutput, left);
         BRMotor.set(ControlMode.PercentOutput, right);
-        System.out.println("SetMotors " + left + "  "  + right);
+        //System.out.println("SetMotors " + left + "  "  + right);
 
         //System.out.println("FL: " + FLMotor.get() + " FR: " + FRMotor.get() + " BL: " + BLMotor.get() + " BR: " + BRMotor.get());
     }

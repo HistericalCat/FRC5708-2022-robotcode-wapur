@@ -73,15 +73,21 @@ public class DriveWithJoystick {
             none
         }
         
-        private bool winch1HitGoing = none;
-        private bool winch2HitGoing = none;
+        private Direction winch1HitGoing = Direction.up;
+        private Direction winch2HitGoing = Direction.up;
 
         @Override
         public void execute(){
             float actPower = 0.0f;
-            if(scheme.getActBackward() && !climber.actuatorIn.get()){
+            /*if(climber.actuatorOut.get()){
+                System.out.println("Maximum extension");
+            } else if(climber.actuatorIn.get()){
+                System.out.println("Minimum extension");
+            }
+            */
+            if(scheme.getActBackward() /*&& !climber.actuatorIn.get() */){
                 actPower = -1.0f;
-            } else if(scheme.getActForward() && !climber.actuatorOut.get()){
+            } else if(scheme.getActForward() /*&& !climber.actuatorOut.get()*/){
                 actPower = 1.0f;
             }
             //System.out.println(power);
@@ -90,7 +96,7 @@ public class DriveWithJoystick {
             climber.driveActuator(actPower);
             
             float winch1Power = (float)scheme.getWinch1Power();
-            if(climber.winchLimit1.get()){
+            /*if(climber.winchLimit1.get()){
                 if(winchHitGoing1 == none) {
                     if(winch1Power > 0) winch1HitGoing = up;
                     if(winch1Power < 0) winch1HitGoing = down;
@@ -103,28 +109,28 @@ public class DriveWithJoystick {
                 winch1Power = 0;
             } else if(winch1HitGoing == down && winch1Power < 0){
                 winch1Power = 0;
-            }
+            }*/
             //reduce winch power to 50%
-            winch1Power *= 0.50;
+            winch1Power *= 0.80;
             climber.driveWinch1(winch1Power);
             
             
             float winch2Power = (float)scheme.getWinch2Power();
-            if(climber.winchLimit2.get()){
-                if(winchHitGoing2 == none) {
-                    if(winch2Power > 0) winch2HitGoing = up;
-                    if(winch2Power < 0) winch2HitGoing = down;
+            /*if(climber.winchLimit2.get()){
+                if(winch2HitGoing == Direction.none) {
+                    if(winch2Power > 0) winch2HitGoing = Direction.up;
+                    if(winch2Power < 0) winch2HitGoing = Direction.down;
                 }
             } else {
-                winchHitGoing2= none;
+                winch2HitGoing= Direction.none;
             }
 
-            if(winch2HitGoing == up && winch2Power > 0){
+            if(winch2HitGoing == Direction.up && winch2Power > 0){
                 winch2Power = 0;
-            } else if(winch2HitGoing == down && winch2Power < 0){
+            } else if(winch2HitGoing == Direction.down && winch2Power < 0){
                 winch2Power = 0;
-            }
-            winch2Power *=0.5;
+            }*/
+            winch2Power *=0.8;
             climber.driveWinch2(winch2Power);
             
             

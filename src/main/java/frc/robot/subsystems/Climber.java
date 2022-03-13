@@ -5,16 +5,18 @@ import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import frc.robot.subsystems.Sensors;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj.DigitalInput;
 
 public class Climber extends SubsystemBase {
     private static Sensors sensors = new Sensors();
     private VictorSPX actuatorMotor;
 
-    public static DigitalInput actuatorOut = new DigitalInput(3);
-    public static DigitalInput actuatorIn = new DigitalInput(2);
-    public static DigitalInput winchLimit1 = new DigitalInput(0);
-    public static DigitalInput winchLimit2 = new DigitalInput(1);
-
+    /*public DigitalInput actuatorOut = new DigitalInput(2);
+    public DigitalInput actuatorIn = new DigitalInput(3);
+    public DigitalInput winchLimit1 = new DigitalInput(0);
+    public DigitalInput winchLimit2 = new DigitalInput(1);
+    */
+    
     //for climber in a box
     private VictorSPX winchMotor1;
     private VictorSPX winchMotor2;
