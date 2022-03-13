@@ -14,7 +14,7 @@ public class DanesControls extends ControlScheme {
         else
         return 0;
     }
-
+    @Override
     public double getWinch2Power(){
         double power = Control.getXboxCtrl().getRightTriggerAxis() - Control.getXboxCtrl().getLeftTriggerAxis();
         if(power > 0.05 || power < -0.05){
