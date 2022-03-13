@@ -87,19 +87,19 @@ public class TCS34725ColorSensor
 	{
 		sensor_initialized = false;
 		
-		System.out.print("Checking for Color Sensor...");
+		//System.out.print("Checking for Color Sensor...");
 		
 		if (!isSensorPresent())
 		{
-			System.out.println("Error - DeviceID register mismatch on Color Sensor!  Cannot Initalize!");
+			//System.out.println("Error - DeviceID register mismatch on Color Sensor!  Cannot Initalize!");
 			return -1;
 		}
 		else
 		{
-			System.out.println("found!");
+			//System.out.println("found!");
 		}
 
-		System.out.print("Initalizing Color Sensor...");
+		//System.out.print("Initalizing Color Sensor...");
 		
 		//Set the integration time
 		write8(TCS34725_ATIME, TCS34725_INTEGRATIONTIME_50MS);
@@ -113,7 +113,7 @@ public class TCS34725ColorSensor
 		write8(TCS34725_ENABLE, TCS34725_ENABLE_PON | TCS34725_ENABLE_AEN);	
 
 		sensor_initialized = true;
-		System.out.println("done!");
+		// System.out.println("done!");
 		return 0;
 	}
 
@@ -143,7 +143,7 @@ public class TCS34725ColorSensor
 		//Don't bother doing anything if the sensor isn't initialized
 		if (!sensor_initialized)
 		{
-			System.out.println("Error: Attempt to read from color sensor, but it's not initalized!");
+			// System.out.println("Error: Attempt to read from color sensor, but it's not initalized!");
 			return new TCSColor(r, b, g, c);
 		}
 		
@@ -152,7 +152,7 @@ public class TCS34725ColorSensor
 		int enable_test_buf = read8(TCS34725_ENABLE);
 		if (enable_test_buf != (TCS34725_ENABLE_PON | TCS34725_ENABLE_AEN))
 		{
-			System.out.println("Error: Attempt to read from color sensor, but the enable register did not read as expected! Sensor has probably been reset.");
+			// System.out.println("Error: Attempt to read from color sensor, but the enable register did not read as expected! Sensor has probably been reset.");
 			sensor_initialized = false;
 			good_data_read = false;
 			return new TCSColor(r, b, g, c);
