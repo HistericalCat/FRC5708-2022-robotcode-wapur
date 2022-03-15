@@ -21,7 +21,6 @@ public class DriveWithJoystick {
             System.out.println("Do Drivetrain Constructed...");
             drivetrain = d;
             addRequirements(drivetrain);
-
         }
         
         @Override
@@ -85,14 +84,10 @@ public class DriveWithJoystick {
                 System.out.println("Minimum extension");
             }
             */
-            if(scheme.getActBackward() /*&& !climber.actuatorIn.get() */){
-                actPower = -1.0f;
-            } else if(scheme.getActForward() /*&& !climber.actuatorOut.get()*/){
-                actPower = 1.0f;
-            }
+            actPower = (float) scheme.getActPower();
             //System.out.println(power);
             //reduce actuator power to 20%
-            actPower *= 0.40;
+            actPower *= 0.70;
             climber.driveActuator(actPower);
             
             float winch1Power = (float)scheme.getWinch1Power();

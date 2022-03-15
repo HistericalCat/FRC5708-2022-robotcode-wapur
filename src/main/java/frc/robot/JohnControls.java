@@ -10,7 +10,6 @@ public class JohnControls extends ControlScheme {
             return power;
         }
         return 0;
-    
     }
 
     @Override
@@ -27,7 +26,6 @@ public class JohnControls extends ControlScheme {
         if(power > 0.05 || power < -0.05){
             return power;
         }
-
         return 0;
     }
 
