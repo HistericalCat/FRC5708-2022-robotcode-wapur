@@ -36,24 +36,17 @@ public class ControlScheme{
     public double getDriveBackward(){
         return Control.getXboxCtrl().getLeftTriggerAxis();
     }
-    public boolean getActForward(){
+    public double getActPower(){
         int POV = Control.getXboxCtrl().getPOV();
         if (POV>=0){
             if(POV>270 || POV<90){
-                return true;
+                return 0.5;
             }
-        }
-        return false;
-    }
-    
-    public boolean getActBackward(){
-        int POV = Control.getXboxCtrl().getPOV();
-        if (POV>=0){
             if(POV>90 && POV<270){
-                return true;
+                return -0.5;
             }
         }
-        return false;   
+        return 0;
     }
     public boolean holdArmStill(){
         return Control.getXboxCtrl().getAButton();

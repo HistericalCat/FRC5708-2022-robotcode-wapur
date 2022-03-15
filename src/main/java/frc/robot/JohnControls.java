@@ -5,7 +5,6 @@ import frc.robot.ControlScheme;
 public class JohnControls extends ControlScheme {
     @Override
     public double getWinch1Power(){
-
         double power = Control.getXboxCtrl().getRightY();
         if(power>0.05 || power< -0.05){
             return power;
@@ -28,7 +27,7 @@ public class JohnControls extends ControlScheme {
         if(power > 0.05 || power < -0.05){
             return power;
         }
-        
+
         return 0;
     }
 
