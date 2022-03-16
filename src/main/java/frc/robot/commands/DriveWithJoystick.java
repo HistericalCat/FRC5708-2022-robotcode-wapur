@@ -60,7 +60,7 @@ public class DriveWithJoystick {
 
     public static class DoClimber extends CommandBase {
         private final Climber climber;
-        private Sensors sensor = new Sensors();
+        //private Sensors sensor = new Sensors();
         public DoClimber(Climber c){
             climber = c;
             addRequirements(climber);

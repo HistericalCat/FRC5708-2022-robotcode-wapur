@@ -12,7 +12,6 @@ public class Sensors extends SubsystemBase {
     private final ColorSensorV3 colorSensor2 = new ColorSensorV3(I2C.Port.kMXP);
     private final TCS34725ColorSensor tcsColorSensor = new TCS34725ColorSensor();
 
-//
 
     public Sensors(){
         tcsColorSensor.init();
