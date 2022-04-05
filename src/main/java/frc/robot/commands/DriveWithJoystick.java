@@ -19,6 +19,7 @@ public class DriveWithJoystick {
 
     public static class DoDrivetrain extends CommandBase {
         private final Drivetrain drivetrain;
+        private static Boolean switchesEnabled = true;
         
         public DoDrivetrain(Drivetrain d){
             System.out.println("Do Drivetrain Constructed...");
