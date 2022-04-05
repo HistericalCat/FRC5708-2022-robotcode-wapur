@@ -48,6 +48,9 @@ public class Robot extends TimedRobot {
 
   private ControlScheme scheme = new JohnControls();
 
+
+  private int testIterator = 0;
+
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -79,6 +82,13 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
+
+//ping command
+    if (testIterator == 50) {
+      testIterator = 0;
+    }
+    testIterator++;
+    //System.out.println(testIterator);
   }
 
   /**
@@ -111,14 +121,14 @@ public class Robot extends TimedRobot {
         System.out.println("Starting robot...");
         m_autoState = m_autoStates.reverse;
         m_autoStartedTime = System.currentTimeMillis();
-        driveTrain.Drive(-0.1, -0.1);
+        driveTrain.Drive(-0.25, -0.25);
         //driveTrain.DrivePolar(-0.3, 0);
         break; 
 
       case reverse:
         long deltaTime = System.currentTimeMillis() - m_autoStartedTime;
         //System.out.println(m_autoStartedTime);
-        if ( deltaTime >= 2000){
+        if ( deltaTime >= 2500){
           m_autoState = m_autoStates.done; 
           System.out.println("Robot stopped. ");
           driveTrain.SetMotors(0, 0);
