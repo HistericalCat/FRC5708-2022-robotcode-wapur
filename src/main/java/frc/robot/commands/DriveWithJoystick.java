@@ -15,12 +15,10 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 public class DriveWithJoystick {
     public static ControlScheme scheme = new ControlScheme();
 
-    private static Boolean winchSwitchesEnabled = true;
-    private static Boolean actSwitchesEnabled = true;
+    //moved switch enabled toggle to the climber class
 
     public static class DoDrivetrain extends CommandBase {
         private final Drivetrain drivetrain;
-        private static Boolean switchesEnabled = true;
         
         public DoDrivetrain(Drivetrain d){
             System.out.println("Do Drivetrain Constructed...");
@@ -76,20 +74,30 @@ public class DriveWithJoystick {
             down,
             none
         }
+
+        private Boolean winchSwitchesEnabled = true;
+        private Boolean actSwitchesEnabled = true;
         
-        private Direction winch1HitGoing = Direction.up;
-        private Direction winch2HitGoing = Direction.up;
+        private Direction winch1HitGoing = Direction.none;
+        private Direction winch2HitGoing = Direction.none;
 
         private long winch1LimitTimer = 0;
         private static long winch1LimitDelay = 1000;
-        private boolean winch1Disabled = false;
 
         private long winch2LimitTimer = 0;
         private static long winch2LimitDelay = 1000;
-        private boolean winch2Disabled = false;
 
         @Override
         public void execute(){
+            if(scheme.overrideSwitchToggle()) {
+                //I know it's weird to have 2 variables for this but it gives us flexibility in the future
+                winchSwitchesEnabled = !winchSwitchesEnabled;
+                actSwitchesEnabled = !actSwitchesEnabled;
+            }
+            if(!(winchSwitchesEnabled && actSwitchesEnabled)) {
+                System.out.println("SWITCHES OVERRIDDEN");
+            }
+
             /*if(climber.actuatorOut.get()){
                 System.out.println("Maximum extension");
             } else if(climber.actuatorIn.get()){
@@ -113,6 +121,41 @@ public class DriveWithJoystick {
             
             float winch1Power = (float)scheme.getWinch1Power();
             if(winchSwitchesEnabled){
+                //disables the retraction if within the delay period
+                if(winch1LimitTimer + winch1LimitDelay  > System.currentTimeMillis() && System.currentTimeMillis() > winch1LimitDelay) {
+                    System.out.println("Activated timer");
+                    if(winch1HitGoing == Direction.down && winch1Power < -0.1) {
+                        winch1Power = (float) -0.1;
+                        System.out.println("Winch is stopped retracting");
+                    }
+                    else if (winch1HitGoing == Direction.up && winch1Power > 0.1) {
+                        winch1Power = (float) 0;
+                        System.out.println("Winch is stopped extending");
+                    }
+                }
+                //sets the timer and guesses direction once when the switch is pressed
+                else{
+                    if(!climber.winchLimit1.get()) {
+                        if(winch1Power > 0.05) winch1HitGoing = Direction.up;
+                        if(winch1Power < -0.05) winch1HitGoing = Direction.down;
+                        if(winch1HitGoing == Direction.down) System.out.println("dir is down");
+                        if(winch1HitGoing == Direction.up) System.out.println("dir is up");
+                        winch1LimitTimer = System.currentTimeMillis();
+                    }
+                }
+                //slows the retraction for a little bit after the disable ends
+                if(winch1LimitTimer + winch1LimitDelay * 1.5  > System.currentTimeMillis() && winch1HitGoing == Direction.down) {
+                    if(winch1Power < 0) {
+                        winch1Power *= 0.5;
+                        System.out.println("Winch is slowed");
+                    }
+                }
+                
+            }
+
+
+
+
                 // if(climber.winchLimit1.get()){
                 //     if(winch1HitGoing == Direction.none) {
                 //         if(winch1Power > 0) winch1HitGoing = Direction.up;
@@ -127,7 +170,7 @@ public class DriveWithJoystick {
                 // } else if(winch1HitGoing == Direction.down && winch1Power < 0){
                 //     winch1Power = 0;
                 // }
-            }
+            //}
 
             //reduce winch 1 power to 90%
             winch1Power *= 0.9;

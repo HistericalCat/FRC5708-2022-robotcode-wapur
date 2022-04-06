@@ -51,6 +51,9 @@ public class ControlScheme{
     public boolean holdArmStill(){
         return Control.getXboxCtrl().getAButton();
     }
+    public boolean overrideSwitchToggle(){
+        return Control.getXboxCtrl().getStartButtonPressed();
+    }
 
 
 }
