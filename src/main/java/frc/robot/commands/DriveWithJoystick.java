@@ -125,6 +125,11 @@ public class DriveWithJoystick {
             //System.out.println(power);
             //reduce actuator power to 90%
             actPower *= 0.90;
+
+            if(scheme.getCreepButton()) {
+                actPower *= 0.5;
+            }
+
             climber.driveActuator(actPower);
             
             float winch1Power = (float)scheme.getWinch1Power();
@@ -165,7 +170,7 @@ public class DriveWithJoystick {
                 //reduce winch 1 power to 90%
                 winch1Power *= 0.9;
 
-                System.out.printf("winch1Power %f", winch1Power);
+                System.out.printf("winch1Power %f\n", winch1Power);
                 if(winch1Power < -0.05)
                 {
                     winch1MovingDir = Direction.down;
