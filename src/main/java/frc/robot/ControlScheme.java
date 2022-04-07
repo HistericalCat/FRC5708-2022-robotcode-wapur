@@ -52,9 +52,11 @@ public class ControlScheme{
         return Control.getXboxCtrl().getAButton();
     }
     public boolean overrideSwitchToggle(){
+        //button right of the xbox button
         return Control.getXboxCtrl().getStartButtonPressed();
     }
     public boolean overrideActToggle(){
+        //button left of the xbox button
         return Control.getXboxCtrl().getBackButtonPressed();
     }
 
