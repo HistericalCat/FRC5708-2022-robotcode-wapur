@@ -78,15 +78,17 @@ public class DriveWithJoystick {
         private Boolean winchSwitchesEnabled = true;
         private Boolean actSwitchesEnabled = true;
         
-        private Direction winch1HitGoing = Direction.none;
+        private Direction winch1MovingDir = Direction.none;
+        private Direction winch1BlockedDir = Direction.none;
+        private Boolean winch1Overshot = false;
+
         private Direction winch2HitGoing = Direction.none;
 
-        private long winch1LimitTimer = 0;
         private static long winch1LimitDelay = 1000;
 
         private long winch2LimitTimer = 0;
         private static long winch2LimitDelay = 1000;
-
+        
         @Override
         public void execute(){
             if(scheme.overrideSwitchToggle()) {
@@ -120,86 +122,56 @@ public class DriveWithJoystick {
             climber.driveActuator(actPower);
             
             float winch1Power = (float)scheme.getWinch1Power();
-            /*
-            if(winchSwitchesEnabled){
-                //disables the retraction if within the delay period
-                if(winch1LimitTimer + winch1LimitDelay  > System.currentTimeMillis() && System.currentTimeMillis() > winch1LimitDelay) {
-                    System.out.println("Activated timer");
-                    if(winch1HitGoing == Direction.down && winch1Power < -0.1) {
-                        winch1Power = (float) -0.1;
-                        System.out.println("Winch is stopped retracting");
+            
+            if(winchSwitchesEnabled) {
+                if(!climber.winchLimit1.get()) {
+                    System.out.print("switch ");
+                    if (winch1BlockedDir == Direction.none)
+                    {
+                        winch1BlockedDir = winch1MovingDir;
+                        System.out.println("Blocked moving " + winch1BlockedDir);
                     }
-                    else if (winch1HitGoing == Direction.up && winch1Power > 0.1) {
-                        winch1Power = (float) 0;
-                        System.out.println("Winch is stopped extending");
+                    winch1Overshot = false;
+                } else {
+                    if (winch1BlockedDir != Direction.none && winch1BlockedDir == winch1MovingDir)
+                    {
+                        winch1Overshot = true;
+                        System.out.println("overshot");
+                    }
+                    else if (!winch1Overshot)
+                    {
+                        winch1BlockedDir = Direction.none;
+                        System.out.println("Unblocked");
                     }
                 }
-                //sets the timer and guesses direction once when the switch is pressed
-                else{ */
-                    if(!climber.winchLimit1.get()) {
-                        if(winch1HitGoing == Direction.up && winch1Power > 0.05)
-                        {
-                            winch1Power = 0;
-                            System.out.println("prevent going up");
-                        }
-                        if(winch1HitGoing == Direction.down && winch1Power < -0.05)
-                        {
-                            winch1Power = 0;
-                            System.out.println("prevent going down");
-                        }
-                        /*
-                        if(winch1Power > 0.05) winch1HitGoing = Direction.up;
-                        if(winch1Power < -0.05) winch1HitGoing = Direction.down;
-                        if(winch1HitGoing == Direction.down) System.out.println("dir is down");
-                        if(winch1HitGoing == Direction.up) System.out.println("dir is up");
-                        */
-                        //winch1LimitTimer = System.currentTimeMillis();
-                    }
-        
-                //slows the retraction for a little bit after the disable ends
-                /*
-                if(winch1LimitTimer + winch1LimitDelay * 1.5  > System.currentTimeMillis() && winch1HitGoing == Direction.down) {
-                    if(winch1Power < 0) {
-                        winch1Power *= 0.5;
-                        System.out.println("Winch is slowed");
-                    }
-                } */
-                
+
+                if(winch1BlockedDir == Direction.up && winch1Power > 0.05)
+                {
+                    winch1Power = 0;
+                    System.out.println("prevent going up");
+                }
+                if(winch1BlockedDir == Direction.down && winch1Power < -0.05)
+                {
+                    winch1Power = 0;
+                    System.out.println("prevent going down");
+                }
             
+                //reduce winch 1 power to 90%
+                winch1Power *= 0.9;
 
-
-
-
-                // if(climber.winchLimit1.get()){
-                //     if(winch1HitGoing == Direction.none) {
-                //         if(winch1Power > 0) winch1HitGoing = Direction.up;
-                //         if(winch1Power < 0) winch1HitGoing = Direction.down;
-                //     }
-                // } else {
-                //     winch1HitGoing = Direction.none;
-                // }
-
-                // if(winch1HitGoing == Direction.up && winch1Power > 0){
-                //     winch1Power = 0;
-                // } else if(winch1HitGoing == Direction.down && winch1Power < 0){
-                //     winch1Power = 0;
-                // }
-            //}
-
-            //reduce winch 1 power to 90%
-            winch1Power *= 0.9;
-
-            if(winch1Power < -0.05)
-            {
-                winch1HitGoing = Direction.down;
-                System.out.println("Dir is down");
+                System.out.printf("winch1Power %f", winch1Power);
+                if(winch1Power < -0.05)
+                {
+                    winch1MovingDir = Direction.down;
+                    System.out.println("Dir is down");
+                }
+                if(winch1Power > 0.05)
+                {
+                    winch1MovingDir = Direction.up;
+                    System.out.println("Dir is up");
+                }
             }
-            if(winch1Power > 0.05)
-            {
-                winch1HitGoing = Direction.up;
-                System.out.println("Dir is up");
-            }
-            
+
             climber.driveWinch1(winch1Power);
             
             
@@ -207,10 +179,10 @@ public class DriveWithJoystick {
             if (winchSwitchesEnabled) {
                 //disables the retraction if within the delay period
                 if(winch2LimitTimer + winch2LimitDelay  > System.currentTimeMillis() && System.currentTimeMillis() > winch2LimitDelay) {
-                    System.out.println("Activated timer");
+                    System.out.println("Activated w2 timer");
                     if(winch2Power < 0.1) {
                         winch2Power = (float) -0.1;
-                        System.out.println("Winch is stopped");
+                        System.out.println("Winch 2 is stopped");
                     }
                 }
                 //sets the timer once when the switch is pressed
@@ -223,7 +195,7 @@ public class DriveWithJoystick {
                 if(winch2LimitTimer + winch2LimitDelay * 1.5  > System.currentTimeMillis()) {
                     if(winch2Power < 0) {
                         winch2Power *= 0.5;
-                        System.out.println("Winch is slowed");
+                        System.out.println("Winch 2 is slowed");
                     }
                 }
                 
