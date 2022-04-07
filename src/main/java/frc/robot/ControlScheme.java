@@ -54,6 +54,9 @@ public class ControlScheme{
     public boolean overrideSwitchToggle(){
         return Control.getXboxCtrl().getStartButtonPressed();
     }
+    public boolean overrideActToggle(){
+        return Control.getXboxCtrl().getBackButtonPressed();
+    }
 
 
 }

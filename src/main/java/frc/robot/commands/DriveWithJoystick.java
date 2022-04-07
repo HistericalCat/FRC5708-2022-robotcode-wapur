@@ -94,10 +94,16 @@ public class DriveWithJoystick {
             if(scheme.overrideSwitchToggle()) {
                 //I know it's weird to have 2 variables for this but it gives us flexibility in the future
                 winchSwitchesEnabled = !winchSwitchesEnabled;
+                //actSwitchesEnabled = !actSwitchesEnabled;
+            }
+            if(scheme.overrideActToggle()) {
                 actSwitchesEnabled = !actSwitchesEnabled;
             }
-            if(!(winchSwitchesEnabled && actSwitchesEnabled)) {
+            if(!winchSwitchesEnabled) {
                 System.out.println("SWITCHES OVERRIDDEN");
+            }
+            if(!actSwitchesEnabled) {
+                System.out.println("ACTUATORS OVERRIDDEN");
             }
 
             /*if(climber.actuatorOut.get()){
