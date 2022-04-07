@@ -120,6 +120,7 @@ public class DriveWithJoystick {
             climber.driveActuator(actPower);
             
             float winch1Power = (float)scheme.getWinch1Power();
+            /*
             if(winchSwitchesEnabled){
                 //disables the retraction if within the delay period
                 if(winch1LimitTimer + winch1LimitDelay  > System.currentTimeMillis() && System.currentTimeMillis() > winch1LimitDelay) {
@@ -134,24 +135,37 @@ public class DriveWithJoystick {
                     }
                 }
                 //sets the timer and guesses direction once when the switch is pressed
-                else{
+                else{ */
                     if(!climber.winchLimit1.get()) {
+                        if(winch1HitGoing == Direction.up && winch1Power > 0.05)
+                        {
+                            winch1Power = 0;
+                            System.out.println("prevent going up");
+                        }
+                        if(winch1HitGoing == Direction.down && winch1Power < -0.05)
+                        {
+                            winch1Power = 0;
+                            System.out.println("prevent going down");
+                        }
+                        /*
                         if(winch1Power > 0.05) winch1HitGoing = Direction.up;
                         if(winch1Power < -0.05) winch1HitGoing = Direction.down;
                         if(winch1HitGoing == Direction.down) System.out.println("dir is down");
                         if(winch1HitGoing == Direction.up) System.out.println("dir is up");
-                        winch1LimitTimer = System.currentTimeMillis();
+                        */
+                        //winch1LimitTimer = System.currentTimeMillis();
                     }
-                }
+        
                 //slows the retraction for a little bit after the disable ends
+                /*
                 if(winch1LimitTimer + winch1LimitDelay * 1.5  > System.currentTimeMillis() && winch1HitGoing == Direction.down) {
                     if(winch1Power < 0) {
                         winch1Power *= 0.5;
                         System.out.println("Winch is slowed");
                     }
-                }
+                } */
                 
-            }
+            
 
 
 
@@ -175,6 +189,17 @@ public class DriveWithJoystick {
             //reduce winch 1 power to 90%
             winch1Power *= 0.9;
 
+            if(winch1Power < -0.05)
+            {
+                winch1HitGoing = Direction.down;
+                System.out.println("Dir is down");
+            }
+            if(winch1Power > 0.05)
+            {
+                winch1HitGoing = Direction.up;
+                System.out.println("Dir is up");
+            }
+            
             climber.driveWinch1(winch1Power);
             
             
