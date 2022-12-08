@@ -11,24 +11,20 @@ public class ControlScheme{
     public boolean getCreepButton(){
         return Control.getXboxCtrl().getYButton();
     }
-    public double getWinch1Power() {
-        double power = Control.getXboxCtrl().getRightY();
-        if(power > .05 || power < -.05){
-            return power;
+    public boolean clawToggle() {
+        return Control.getXboxCtrl().getAButton();
+    }
+    public double clawOverride() {
+        int POV = Control.getXboxCtrl().getPOV();
+        if (POV>=0){
+            if(POV>45 || POV<135){
+                return 1;
+            }
+            if(POV<315 || POV>225){
+                return -1;
+            }
         }
         return 0;
-    }
-
-
-    public double getWinch2Power(){
-        double power = Control.getXboxCtrl().getLeftY();
-        if(power > .05 || power < -.05){
-            return -power;
-        }
-        return 0;
-    }
-    public boolean getSwitchMode(){
-        return Control.getXboxCtrl().getXButton();
     }
     public double getDriveForward(){
         return Control.getXboxCtrl().getRightTriggerAxis();
